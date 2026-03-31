@@ -1,24 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Save My New Single</title>
-    <!-- Social Preview Tags -->
-    <meta property="og:title" content="Pre-Save My New Single">
-    <meta property="og:description" content="Click to pre-save on Spotify, Apple Music, or Deezer.">
-    <style>
-        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .loading { text-align: center; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; }
-    </style>
-</head>
-<body>
-    <div class="loading">Loading Pre-save...</div>
-    <script>
-        // Backup redirect in case the Worker fails
-        setTimeout(() => {
-            window.location.href = "https://label-caster.ffm.to/tsh4j2ttpj";
-        }, 2000);
-    </script>
-</body>
-</html>
+export default {
+  async fetch(request, env) {
+    const targetUrl = "https://label-caster.ffm.to/tsh4j2ttpj";
+
+    // Fetch the Feature.fm content
+    const response = await fetch(targetUrl, {
+      headers: {
+        "User-Agent": request.headers.get("User-Agent"),
+        "Accept": request.headers.get("Accept")
+      }
+    });
+
+    // Create a new response to serve under YOUR domain
+    const newResponse = new Response(response.body, response);
+
+    // This ensures the page displays properly and allows the Spotify/Deezer popups
+    newResponse.headers.set("Access-Control-Allow-Origin", "*");
+    newResponse.headers.delete("X-Frame-Options");
+    newResponse.headers.delete("Content-Security-Policy");
+
+    return newResponse;
+  }
+};
